@@ -49,14 +49,28 @@
         .fade-image {
             opacity: 1;
         }
+
+        /* Additional styles for placement */
+        #connecting {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #complete {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
     </style>
 </head>
 <body>
 
     <div class="text-container" id="textContainer"></div>
     <div class="image-container" id="imageContainer">
-        <!-- Placeholder for image -->
-        <img src="https://via.placeholder.com/150" alt="Cyberspace Image">
+        <img src="https://via.placeholder.com/150" alt="Cyberspace Image" />
     </div>
 
     <script>
@@ -89,17 +103,26 @@
                 }, 100);
 
                 // Handle specific logic for certain texts
-                if (currentTextIndex === 2) { // "Connecting..."
-                    // Automatically move to next text after 5 seconds
-                    setTimeout(() => {
-                        changeText(); // Go to next text after 5 seconds
-                    }, 5000);
+                if (currentTextIndex === 2 || currentTextIndex === 3) { // "Connecting..." or "Connection complete!"
+                    const image = document.querySelector("#imageContainer img");
+                    imageContainer.classList.add('fade-image'); // Show image
 
-                    return; // Prevents moving to the next text immediately
+                    // Position text on top
+                    textContainer.style.top = '5%';
+                } else {
+                    textContainer.style.top = '50%'; // Default position for text in the center
                 }
 
-                if (currentTextIndex === 3) { // "Connection complete!"
-                    imageContainer.classList.add('fade-image');
+                if (currentTextIndex === 4) { // "Starting replication."
+                    setTimeout(() => {
+                        newText.classList.add('fade-out');
+                        setTimeout(() => {
+                            newText.remove();
+                            currentTextIndex++;
+                            changeText();
+                        }, 1000);
+                    }, 5000);
+                    return; // Skip immediate transition for "Starting replication."
                 }
 
                 // Wait for the user to click to continue
