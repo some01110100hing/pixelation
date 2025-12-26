@@ -4,21 +4,31 @@
   <meta charset="UTF-8" />
   <title>Cyberspace Transfer</title>
 
-  <!-- Coding Font -->
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <!-- 코딩 느낌 깔끔한 폰트 -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 
   <style>
-    html, body {
+    * {
       margin: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #0F52BA;
-      font-family: 'JetBrains Mono', monospace;
-      overflow: hidden;
-      cursor: pointer;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
     }
 
-    .container {
+    body {
+      width: 100vw;
+      height: 100vh;
+      background-color: #0F52BA;
+      font-family: 'JetBrains Mono', monospace;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    #container {
       position: relative;
       width: 100%;
       height: 100%;
@@ -28,11 +38,9 @@
       position: absolute;
       width: 100%;
       text-align: center;
-      color: #ffffff;
-      font-size: 28px;
+      font-size: 1.5rem;
       opacity: 0;
-      transition: opacity 1s ease;
-      pointer-events: none;
+      transition: opacity 0.8s ease;
     }
 
     .center {
@@ -42,102 +50,86 @@
 
     .top {
       top: 40px;
-    }
-
-    .image {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      transition: opacity 1s ease;
-      pointer-events: none;
-    }
-
-    .image img {
-      width: 260px;
-      opacity: 0.9;
+      font-size: 1.2rem;
     }
 
     .visible {
       opacity: 1;
     }
+
+    #image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 260px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #image.visible {
+      opacity: 1;
+    }
   </style>
 </head>
+
 <body>
-
-<div class="container">
-  <div id="text" class="text center"></div>
-
-  <div id="image" class="image">
-    <!-- 원하는 이미지로 교체 가능 -->
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Gray_circles.svg/512px-Gray_circles.svg.png">
+  <div id="container">
+    <div id="text" class="text center"></div>
+    <img id="image" src="image.png" alt="process image" />
   </div>
-</div>
 
-<script>
-  const textEl = document.getElementById("text");
-  const imageEl = document.getElementById("image");
+  <script>
+    const steps = [
+      { text: "Would you like to copy your ego to cyberspace?", position: "center" },
+      { text: "Please place your hand here.", position: "center" },
+      { text: "Connecting...", position: "top", image: true },
+      { text: "Connection complete!", position: "top", image: true },
+      { text: "Starting replication.", position: "center" },
+      { text: "Thank you! The process is complete!", position: "center" },
+      { text: "Your data has been successfully and securely copied!", position: "center" },
+      { text: "100% harmless, guaranteed!", position: "center" },
+      { text: "Enjoy your time in cyberspace!", position: "center", end: true }
+    ];
 
-  let step = 0;
-  let autoTimer = null;
+    let index = 0;
+    const textEl = document.getElementById("text");
+    const imageEl = document.getElementById("image");
 
-  const steps = [
-    { text: "Would you like to copy your ego to cyberspace?", pos: "center", trigger: "click" },
-    { text: "Please place your hand here.", pos: "center", trigger: "click" },
-    { text: "Connecting...", pos: "top", trigger: "auto", delay: 5000, image: true },
-    { text: "Connection complete!", pos: "top", trigger: "click", image: true },
-    { text: "Starting replication.", pos: "center", trigger: "auto", delay: 5000 },
-    { text: "Thank you! The process is complete!", pos: "center", trigger: "click" },
-    { text: "Your data has been successfully and securely copied!", pos: "center", trigger: "click" },
-    { text: "100% harmless, guaranteed!", pos: "center", trigger: "click" },
-    { text: "Enjoy your time in cyberspace!", pos: "center", trigger: "click", end: true }
-  ];
-
-  function showStep() {
-    clearTimeout(autoTimer);
-
-    const data = steps[step];
-
-    textEl.classList.remove("visible");
-
-    setTimeout(() => {
-      if (!data) return;
-
-      textEl.textContent = data.text;
-      textEl.className = `text ${data.pos}`;
-      textEl.classList.add("visible");
-
-      if (data.image) {
-        imageEl.classList.add("visible");
-      }
-
-      if (data.trigger === "auto") {
-        autoTimer = setTimeout(nextStep, data.delay);
-      }
-    }, 1000);
-  }
-
-  function nextStep() {
-    if (steps[step]?.end) {
+    function showStep() {
       textEl.classList.remove("visible");
-      imageEl.classList.remove("visible");
-      return;
+
+      setTimeout(() => {
+        if (index >= steps.length) return;
+
+        const step = steps[index];
+        textEl.textContent = step.text;
+        textEl.className = `text ${step.position}`;
+        textEl.classList.add("visible");
+
+        if (step.image) {
+          imageEl.classList.add("visible");
+        }
+
+        if (step.end) {
+          setTimeout(() => {
+            textEl.classList.remove("visible");
+          }, 1200);
+        }
+
+        index++;
+      }, 800);
     }
 
-    step++;
+    // 첫 문장 표시
     showStep();
-  }
 
-  document.addEventListener("click", () => {
-    if (steps[step]?.trigger === "click") {
-      nextStep();
-    }
-  });
-
-  // 시작
-  showStep();
-</script>
-
+    // 클릭 시 다음 문장
+    document.body.addEventListener("click", () => {
+      if (index < steps.length) {
+        showStep();
+      }
+    });
+  </script>
 </body>
 </html>
