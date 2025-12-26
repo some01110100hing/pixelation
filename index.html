@@ -95,6 +95,7 @@
         ];
 
         let currentTextIndex = 0;
+        let isConnecting = false;  // Flag to track if "Connecting..." is being shown
 
         function changeText() {
             if (currentTextIndex < texts.length) {
@@ -110,13 +111,15 @@
 
                 // Handle specific logic for certain texts
                 if (currentTextIndex === 2) { // "Connecting..."
+                    isConnecting = true; // Set flag to true
                     const dots = document.createElement('span');
                     dots.classList.add('dots');
                     newText.appendChild(dots);
 
-                    // Avoid repeating "Connecting..."
+                    // Automatically move to next text after 5 seconds
                     setTimeout(() => {
-                        changeText(); // Go to next text after 5 seconds
+                        isConnecting = false; // Reset flag after 5 seconds
+                        changeText(); // Move to next text
                     }, 5000);
 
                     return; // Prevents moving to the next text immediately
@@ -126,16 +129,18 @@
                     imageContainer.classList.add('fade-image');
                 }
 
-                // Wait for the user to click to continue
-                newText.addEventListener('click', () => {
-                    // Fade out current text
-                    newText.classList.add('fade-out');
-                    setTimeout(() => {
-                        newText.remove();
-                        currentTextIndex++;
-                        changeText();
-                    }, 1000);
-                });
+                // Wait for the user to click to continue, except when connecting
+                if (!isConnecting) {
+                    newText.addEventListener('click', () => {
+                        // Fade out current text
+                        newText.classList.add('fade-out');
+                        setTimeout(() => {
+                            newText.remove();
+                            currentTextIndex++;
+                            changeText();
+                        }, 1000);
+                    });
+                }
 
                 currentTextIndex++;
             }
