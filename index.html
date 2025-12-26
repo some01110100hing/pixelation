@@ -49,26 +49,6 @@
         .fade-image {
             opacity: 1;
         }
-
-        .dots {
-            display: inline-block;
-            animation: dots 1.5s infinite steps(1);
-        }
-
-        @keyframes dots {
-            0%, 100% {
-                content: "";
-            }
-            25% {
-                content: ".";
-            }
-            50% {
-                content: "..";
-            }
-            75% {
-                content: "...";
-            }
-        }
     </style>
 </head>
 <body>
@@ -110,11 +90,7 @@
 
                 // Handle specific logic for certain texts
                 if (currentTextIndex === 2) { // "Connecting..."
-                    const dots = document.createElement('span');
-                    dots.classList.add('dots');
-                    newText.appendChild(dots);
-
-                    // Avoid repeating "Connecting..."
+                    // Automatically move to next text after 5 seconds
                     setTimeout(() => {
                         changeText(); // Go to next text after 5 seconds
                     }, 5000);
