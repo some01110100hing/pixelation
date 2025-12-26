@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Cyberspace Transfer</title>
 
-  <!-- 코딩 느낌 깔끔한 폰트 -->
+  <!-- 깔끔한 코딩 폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 
   <style>
@@ -76,16 +76,21 @@
 <body>
   <div id="container">
     <div id="text" class="text center"></div>
-    <img id="image" src="image.png" alt="process image" />
+    <!-- 손 이미지 -->
+    <img id="image" src="image.png" alt="hand scan" />
   </div>
 
   <script>
     const steps = [
       { text: "Would you like to copy your ego to cyberspace?", position: "center" },
       { text: "Please place your hand here.", position: "center" },
+
       { text: "Connecting...", position: "top", image: true },
       { text: "Connection complete!", position: "top", image: true },
-      { text: "Starting replication.", position: "center" },
+
+      // 👉 이 단계에서 이미지 페이드 아웃
+      { text: "Starting replication.", position: "center", imageOff: true },
+
       { text: "Thank you! The process is complete!", position: "center" },
       { text: "Your data has been successfully and securely copied!", position: "center" },
       { text: "100% harmless, guaranteed!", position: "center" },
@@ -97,20 +102,30 @@
     const imageEl = document.getElementById("image");
 
     function showStep() {
+      // 현재 텍스트 페이드 아웃
       textEl.classList.remove("visible");
 
       setTimeout(() => {
         if (index >= steps.length) return;
 
         const step = steps[index];
+
+        // 텍스트 설정
         textEl.textContent = step.text;
         textEl.className = `text ${step.position}`;
         textEl.classList.add("visible");
 
+        // 이미지 표시
         if (step.image) {
           imageEl.classList.add("visible");
         }
 
+        // 이미지 제거
+        if (step.imageOff) {
+          imageEl.classList.remove("visible");
+        }
+
+        // 마지막 문장 후 텍스트 제거
         if (step.end) {
           setTimeout(() => {
             textEl.classList.remove("visible");
@@ -124,7 +139,7 @@
     // 첫 문장 표시
     showStep();
 
-    // 클릭 시 다음 문장
+    // 클릭 시 다음 단계
     document.body.addEventListener("click", () => {
       if (index < steps.length) {
         showStep();
