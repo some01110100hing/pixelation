@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberspace Replication</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0F52BA;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        .text-container {
+            position: absolute;
+            text-align: center;
+        }
+
+        .text {
+            font-size: 2rem;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .fade-in {
+            opacity: 1;
+        }
+
+        .fade-out {
+            opacity: 0;
+        }
+
+        .image-container {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .fade-image {
+            opacity: 1;
+        }
+
+        .dots {
+            display: inline-block;
+            animation: dots 1.5s infinite steps(1);
+        }
+
+        @keyframes dots {
+            0%, 100% {
+                content: "";
+            }
+            25% {
+                content: ".";
+            }
+            50% {
+                content: "..";
+            }
+            75% {
+                content: "...";
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="text-container" id="textContainer"></div>
+    <div class="image-container" id="imageContainer">
+        <!-- Placeholder for image -->
+        <img src="https://via.placeholder.com/150" alt="Cyberspace Image">
+    </div>
+
+    <script>
+        const textContainer = document.getElementById('textContainer');
+        const imageContainer = document.getElementById('imageContainer');
+        const texts = [
+            'Would you like to copy your ego to cyberspace?',
+            'Please place your hand here.',
+            'Connecting...',
+            'Connection complete!',
+            'Starting replication.',
+            'Thank you! The process is complete!',
+            'Your data has been successfully and securely copied!',
+            '100% harmless, guaranteed!',
+            'Enjoy your time in cyberspace!'
+        ];
+
+        let currentTextIndex = 0;
+
+        function changeText() {
+            if (currentTextIndex < texts.length) {
+                const newText = document.createElement('div');
+                newText.classList.add('text');
+                newText.textContent = texts[currentTextIndex];
+                textContainer.appendChild(newText);
+
+                // Fade-in effect for new text
+                setTimeout(() => {
+                    newText.classList.add('fade-in');
+                }, 100);
+
+                // Handle specific logic for certain texts
+                if (currentTextIndex === 2) { // "Connecting..."
+                    const dots = document.createElement('span');
+                    dots.classList.add('dots');
+                    newText.appendChild(dots);
+                    setTimeout(() => {
+                        changeText();
+                    }, 5000);
+                    return;
+                }
+
+                if (currentTextIndex === 3) { // "Connection complete!"
+                    imageContainer.classList.add('fade-image');
+                }
+
+                // Wait for the user to click to continue
+                newText.addEventListener('click', () => {
+                    // Fade out current text
+                    newText.classList.add('fade-out');
+                    setTimeout(() => {
+                        newText.remove();
+                        currentTextIndex++;
+                        changeText();
+                    }, 1000);
+                });
+
+                currentTextIndex++;
+            }
+        }
+
+        // Start the process
+        changeText();
+    </script>
+
+</body>
+</html>
