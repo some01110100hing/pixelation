@@ -50,19 +50,24 @@
             opacity: 1;
         }
 
-        /* Additional styles for placement */
-        #connecting {
-            position: absolute;
-            top: 5%;
-            left: 50%;
-            transform: translateX(-50%);
+        .dots {
+            display: inline-block;
+            animation: dots 1.5s infinite steps(1);
         }
 
-        #complete {
-            position: absolute;
-            top: 5%;
-            left: 50%;
-            transform: translateX(-50%);
+        @keyframes dots {
+            0%, 100% {
+                content: "";
+            }
+            25% {
+                content: ".";
+            }
+            50% {
+                content: "..";
+            }
+            75% {
+                content: "...";
+            }
         }
     </style>
 </head>
@@ -70,7 +75,8 @@
 
     <div class="text-container" id="textContainer"></div>
     <div class="image-container" id="imageContainer">
-        <img src="https://via.placeholder.com/150" alt="Cyberspace Image" />
+        <!-- Placeholder for image -->
+        <img src="https://via.placeholder.com/150" alt="Cyberspace Image">
     </div>
 
     <script>
@@ -103,26 +109,21 @@
                 }, 100);
 
                 // Handle specific logic for certain texts
-                if (currentTextIndex === 2 || currentTextIndex === 3) { // "Connecting..." or "Connection complete!"
-                    const image = document.querySelector("#imageContainer img");
-                    imageContainer.classList.add('fade-image'); // Show image
+                if (currentTextIndex === 2) { // "Connecting..."
+                    const dots = document.createElement('span');
+                    dots.classList.add('dots');
+                    newText.appendChild(dots);
 
-                    // Position text on top
-                    textContainer.style.top = '5%';
-                } else {
-                    textContainer.style.top = '50%'; // Default position for text in the center
+                    // Avoid repeating "Connecting..."
+                    setTimeout(() => {
+                        changeText(); // Go to next text after 5 seconds
+                    }, 5000);
+
+                    return; // Prevents moving to the next text immediately
                 }
 
-                if (currentTextIndex === 4) { // "Starting replication."
-                    setTimeout(() => {
-                        newText.classList.add('fade-out');
-                        setTimeout(() => {
-                            newText.remove();
-                            currentTextIndex++;
-                            changeText();
-                        }, 1000);
-                    }, 5000);
-                    return; // Skip immediate transition for "Starting replication."
+                if (currentTextIndex === 3) { // "Connection complete!"
+                    imageContainer.classList.add('fade-image');
                 }
 
                 // Wait for the user to click to continue
