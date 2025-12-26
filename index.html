@@ -113,10 +113,13 @@
                     const dots = document.createElement('span');
                     dots.classList.add('dots');
                     newText.appendChild(dots);
+
+                    // Avoid repeating "Connecting..."
                     setTimeout(() => {
-                        changeText();
+                        changeText(); // Go to next text after 5 seconds
                     }, 5000);
-                    return;
+
+                    return; // Prevents moving to the next text immediately
                 }
 
                 if (currentTextIndex === 3) { // "Connection complete!"
